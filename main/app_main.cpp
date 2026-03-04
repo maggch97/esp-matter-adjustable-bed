@@ -464,10 +464,9 @@ extern "C" void app_main()
             return;
         }
 
-        // 配置窗帘特性：举升、位置感知举升、绝对位置
+        // 配置窗帘特性：举升、位置感知举升
         window_covering::feature::lift::config_t lift1 = {};
         window_covering::feature::position_aware_lift::config_t pos_lift1 = {};
-        window_covering::feature::absolute_position::config_t abs_pos1 = {};
 
         // 初始化相关属性，下面使用 nullable 类型将初始百分比设置为 0
         nullable<uint8_t> percentage(0);
@@ -478,7 +477,6 @@ extern "C" void app_main()
 
         window_covering::feature::lift::add(wc_cluster1, &lift1);
         window_covering::feature::position_aware_lift::add(wc_cluster1, &pos_lift1);
-        window_covering::feature::absolute_position::add(wc_cluster1, &abs_pos1);
         endpoint::set_parent_endpoint(endpoint1, aggregator);
         motor1_endpoint_id = endpoint::get_id(endpoint1);
     }
@@ -501,7 +499,6 @@ extern "C" void app_main()
 
         window_covering::feature::lift::config_t lift2 = {};
         window_covering::feature::position_aware_lift::config_t pos_lift2 = {};
-        window_covering::feature::absolute_position::config_t abs_pos2 = {};
 
         nullable<uint8_t> percentage(0);
         nullable<uint16_t> percentage_100ths(0);
@@ -511,7 +508,6 @@ extern "C" void app_main()
 
         window_covering::feature::lift::add(wc_cluster2, &lift2);
         window_covering::feature::position_aware_lift::add(wc_cluster2, &pos_lift2);
-        window_covering::feature::absolute_position::add(wc_cluster2, &abs_pos2);
         endpoint::set_parent_endpoint(endpoint2, aggregator);
         motor1_endpoint_id = endpoint::get_id(endpoint2);
     }
