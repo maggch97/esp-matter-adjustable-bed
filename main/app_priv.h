@@ -8,9 +8,20 @@
 
 #pragma once
 
+#include <stdlib.h>
 #include <esp_err.h>
 #include <esp_matter.h>
 #include <hal/gpio_types.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
+
+#define ABORT_APP_ON_FAILURE(x, ...) do {           \
+        if (!(unlikely(x))) {                       \
+            __VA_ARGS__;                            \
+            vTaskDelay(5000 / portTICK_PERIOD_MS);  \
+            abort();                                \
+        }                                           \
+    } while (0)
 
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD
 #include "esp_openthread_types.h"

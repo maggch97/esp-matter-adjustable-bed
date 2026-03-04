@@ -16,9 +16,6 @@
 
 #include <app/util/attribute-storage.h>
 #include <app_priv.h>
-#include <app_reset.h>
-#include <common_macros.h>
-#include <enable_esp_insights.h>
 #include "driver/gpio.h"
 #if CHIP_DEVICE_CONFIG_ENABLE_THREAD
 #include <platform/ESP32/OpenthreadLauncher.h>
@@ -236,11 +233,6 @@ void init_relays(void)
 
 static uint16_t configured_buttons = 0;
 static button_endpoint button_list[CONFIG_MAX_CONFIGURABLE_BUTTONS];
-
-#if CONFIG_ENABLE_ESP_INSIGHTS_TRACE
-extern const char insights_auth_key_start[] asm("_binary_insights_auth_key_txt_start");
-extern const char insights_auth_key_end[] asm("_binary_insights_auth_key_txt_end");
-#endif
 
 namespace {
 // Please refer to https://github.com/CHIP-Specifications/connectedhomeip-spec/blob/master/src/namespaces
@@ -545,10 +537,6 @@ extern "C" void app_main()
     /* Matter start */
     err = esp_matter::start(app_event_cb);
     ABORT_APP_ON_FAILURE(err == ESP_OK, ESP_LOGE(TAG, "Failed to start Matter, err:%d", err));
-
-#if CONFIG_ENABLE_ESP_INSIGHTS_TRACE
-    enable_insights(insights_auth_key_start);
-#endif
 
     // SetTagList(1, chip::Span<const Descriptor::Structs::SemanticTagStruct::Type>(gEp1TagList));
     // SetTagList(2, chip::Span<const Descriptor::Structs::SemanticTagStruct::Type>(gEp2TagList));
