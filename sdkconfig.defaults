@@ -45,3 +45,6 @@ CONFIG_LWIP_IPV6_NUM_ADDRESSES=6
 
 # This project uses 2 window covering endpoints + aggregator
 CONFIG_ESP_MATTER_MAX_DYNAMIC_ENDPOINT_COUNT=4
+
+# Increase FreeRTOS timer task stack for ScheduleLambda calls in timer callback
+CONFIG_FREERTOS_TIMER_TASK_STACK_DEPTH=4096
