@@ -329,7 +329,7 @@ static esp_err_t app_attribute_update_cb(attribute::callback_type_t type, uint16
             motor1_target_lift_percent_100ths = target_lift_percent_100ths;
         } else if (endpoint_id == motor2_endpoint_id) {
             motor_id = 2;
-            motor1_target_lift_percent_100ths = target_lift_percent_100ths;
+            motor2_target_lift_percent_100ths = target_lift_percent_100ths;
         }
         ESP_LOGI(TAG, "Motor id %d, Target Lift Position updated to %d%%", motor_id, target_percentage);
         chip::DeviceLayer::SystemLayer().ScheduleLambda(
