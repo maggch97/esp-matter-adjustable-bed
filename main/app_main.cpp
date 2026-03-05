@@ -450,33 +450,23 @@ extern "C" void app_main()
     /******************** 注册电机 1 对应的窗帘设备 ********************/
     {
         esp_matter::endpoint::window_covering_device::config_t wc_config1 = {};
-        // 根据需要设置 wc_config1 的各项参数（例如设备名称、描述等）
-        // context 参数（第四个参数）传入 (void*)1 用于区分电机 1
+
+        // 初始化相关属性，下面使用 nullable 类型将初始百分比设置为 0
+        nullable<uint8_t> percentage(0);
+        nullable<uint16_t> percentage_100ths(0);
+        wc_config1.window_covering.features.position_aware_lift.current_position_lift_percentage = percentage;
+        wc_config1.window_covering.features.position_aware_lift.target_position_lift_percent_100ths = percentage_100ths;
+        wc_config1.window_covering.features.position_aware_lift.current_position_lift_percent_100ths = percentage_100ths;
+        wc_config1.window_covering.feature_flags =
+            (uint32_t)chip::app::Clusters::WindowCovering::Feature::kLift |
+            (uint32_t)chip::app::Clusters::WindowCovering::Feature::kPositionAwareLift;
+
         endpoint_t *endpoint1 =
             esp_matter::endpoint::window_covering_device::create(node, &wc_config1, ENDPOINT_FLAG_NONE, (void *)1);
         if (endpoint1 == nullptr) {
             ESP_LOGE(TAG, "创建电机1窗帘端点失败");
             return;
         }
-        cluster_t *wc_cluster1 = cluster::get(endpoint1, WindowCovering::Id);
-        if (wc_cluster1 == nullptr) {
-            ESP_LOGE(TAG, "获取电机1窗帘集群失败");
-            return;
-        }
-
-        // 配置窗帘特性：举升、位置感知举升
-        window_covering::feature::lift::config_t lift1 = {};
-        window_covering::feature::position_aware_lift::config_t pos_lift1 = {};
-
-        // 初始化相关属性，下面使用 nullable 类型将初始百分比设置为 0
-        nullable<uint8_t> percentage(0);
-        nullable<uint16_t> percentage_100ths(0);
-        pos_lift1.current_position_lift_percentage = percentage;
-        pos_lift1.target_position_lift_percent_100ths = percentage_100ths;
-        pos_lift1.current_position_lift_percent_100ths = percentage_100ths;
-
-        window_covering::feature::lift::add(wc_cluster1, &lift1);
-        window_covering::feature::position_aware_lift::add(wc_cluster1, &pos_lift1);
         endpoint::set_parent_endpoint(endpoint1, aggregator);
         motor1_endpoint_id = endpoint::get_id(endpoint1);
     }
@@ -484,32 +474,24 @@ extern "C" void app_main()
     /******************** 注册电机 2 对应的窗帘设备 ********************/
     {
         esp_matter::endpoint::window_covering_device::config_t wc_config2 = {};
-        // context 参数传入 (void*)2 表示该端点对应电机 2
+
+        nullable<uint8_t> percentage(0);
+        nullable<uint16_t> percentage_100ths(0);
+        wc_config2.window_covering.features.position_aware_lift.current_position_lift_percentage = percentage;
+        wc_config2.window_covering.features.position_aware_lift.target_position_lift_percent_100ths = percentage_100ths;
+        wc_config2.window_covering.features.position_aware_lift.current_position_lift_percent_100ths = percentage_100ths;
+        wc_config2.window_covering.feature_flags =
+            (uint32_t)chip::app::Clusters::WindowCovering::Feature::kLift |
+            (uint32_t)chip::app::Clusters::WindowCovering::Feature::kPositionAwareLift;
+
         endpoint_t *endpoint2 =
             esp_matter::endpoint::window_covering_device::create(node, &wc_config2, ENDPOINT_FLAG_NONE, (void *)2);
         if (endpoint2 == nullptr) {
             ESP_LOGE(TAG, "创建电机2窗帘端点失败");
             return;
         }
-        cluster_t *wc_cluster2 = cluster::get(endpoint2, WindowCovering::Id);
-        if (wc_cluster2 == nullptr) {
-            ESP_LOGE(TAG, "获取电机2窗帘集群失败");
-            return;
-        }
-
-        window_covering::feature::lift::config_t lift2 = {};
-        window_covering::feature::position_aware_lift::config_t pos_lift2 = {};
-
-        nullable<uint8_t> percentage(0);
-        nullable<uint16_t> percentage_100ths(0);
-        pos_lift2.current_position_lift_percentage = percentage;
-        pos_lift2.target_position_lift_percent_100ths = percentage_100ths;
-        pos_lift2.current_position_lift_percent_100ths = percentage_100ths;
-
-        window_covering::feature::lift::add(wc_cluster2, &lift2);
-        window_covering::feature::position_aware_lift::add(wc_cluster2, &pos_lift2);
         endpoint::set_parent_endpoint(endpoint2, aggregator);
-        motor1_endpoint_id = endpoint::get_id(endpoint2);
+        motor2_endpoint_id = endpoint::get_id(endpoint2);
     }
 
     /* Use the code snippet commented below to create more physical buttons. */
