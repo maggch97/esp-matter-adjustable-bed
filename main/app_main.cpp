@@ -77,7 +77,7 @@ void motor_timer_callback(TimerHandle_t xTimer)
         motor2_current_position = FULL_MOVEMENT_TIME_MS;
     }
 
-    // 电机1控制（假设 homekit 中 motor_id==2 对应 motor1）
+    // 电机1控制
     if (motor1_current_position < motor1_target_position) {
         // 需要正转（增加位置）
         gpio_set_level(MOTOR1_FORWARD_PIN, 1);
@@ -123,7 +123,7 @@ void motor_timer_callback(TimerHandle_t xTimer)
         motor1_move_in_last_interval = false;
     }
 
-    // 电机2控制（假设 homekit 中 motor_id==3 对应 motor2）
+    // 电机2控制
     if (motor2_current_position < motor2_target_position) {
         gpio_set_level(MOTOR2_FORWARD_PIN, 1);
         gpio_set_level(MOTOR2_REVERSE_PIN, 0);
@@ -172,7 +172,7 @@ void motor_timer_callback(TimerHandle_t xTimer)
  * 此函数将其转换为十分之一百分比单位，并更新对应电机的 target_position 变量，
  * 实际运动由定时器周期性更新。
  *
- * @param motor_id 电机编号（homekit 中例如为 2 或 3）
+ * @param motor_id 电机编号（1 或 2）
  * @param target_position 目标位置（百分比，0～100）
  */
 void motor_move(int motor_id, int target_position)
@@ -214,22 +214,6 @@ void init_relays(void)
     gpio_set_level(MOTOR2_FORWARD_PIN, 0);
     gpio_set_level(MOTOR2_REVERSE_PIN, 0);
 }
-
-// /**
-//  * @brief Matter 属性回调函数
-//  *
-//  * 当 Matter 收到窗帘设备目标位置更新时，会调用此回调函数。
-//  * context 参数用来区分是哪个窗帘设备（1 对应电机1，2 对应电机2）。
-//  *
-//  * @param context         上下文数据，此处传入电机编号（1 或 2）
-//  * @param target_position 目标位置百分比
-//  */
-// void matter_window_covering_target_position_callback(void *context, int target_position)
-// {
-//     int motor_id = (int)context;
-//     ESP_LOGI(TAG, "Matter 命令：电机 %d 目标位置更新为 %d%%", motor_id, target_position);
-//     motor_move(motor_id, target_position);
-// }
 
 static uint16_t configured_buttons = 0;
 static button_endpoint button_list[CONFIG_MAX_CONFIGURABLE_BUTTONS];
